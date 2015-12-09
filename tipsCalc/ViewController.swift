@@ -14,6 +14,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var billTextField: UITextField!
     @IBOutlet weak var tipSegment: UISegmentedControl!
     
+    var tipCalculator = TipCalculator()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,17 +34,25 @@ class ViewController: UIViewController {
     }
 
     private func updateDisplay() {
-        var bill = 0.0
-        if (billTextField.text != "") { bill = Double(billTextField.text!)! }
-        let tip = bill * Double(Percentages.tipPercent[tipSegment.selectedSegmentIndex]) / 100
-        tipLabel.text = String(format: "$%.2f", tip)
-        let total = bill + tip
-        totalLabel.text = String(format: "$%.2f", total)
+        tipLabel.text = String(format: "$%.2f", tipCalculator.getTotalTips())
+        totalLabel.text = String(format: "$%.2f", tipCalculator.getTotalBill())
+        splitTipLabel.text = String(format: "$%.2f", tipCalculator.getTotalTipsAfterSplit())
+        splitTotalLabel.text = String(format: "$%.2f", tipCalculator.getTotalBillAfterSplit())
     }
     
     @IBAction func billAmountEditingChanged(sender: AnyObject) {
-        updateDisplay()
-        sliderValueChanged(sender)
+        if billTextField.text != nil {
+            let billText = billTextField.text!
+            if billText == "" {
+                totalLabel.text = "$0.0"
+                tipCalculator.changeBill(0.0)
+            } else {
+                if let bill = Float(billText) {
+                    tipCalculator.changeBill(bill)
+                    updateDisplay()
+                }
+            }
+        }
     }
     
     @IBOutlet weak var splitsSlider: UISlider!
@@ -51,15 +61,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var splitTotalLabel: UILabel!
     @IBAction func sliderValueChanged(sender: AnyObject) {
         splitsLabel.text = String(Int(splitsSlider.value))
-        var bill: Float = 0.0
-        if (billTextField.text != "") { bill = Float(billTextField.text!)! }
-        let tip = bill * Float(Percentages.tipPercent[tipSegment.selectedSegmentIndex]) / 100
-        let total = bill + tip
-        let splits = Int(splitsSlider.value)
-        let eachTip = tip / Float(splits)
-        let eachTotal = total / Float(splits)
-        splitTipLabel.text = String(format: "$%.2f", eachTip)
-        splitTotalLabel.text = String(format: "$%.2f", eachTotal)
+        tipCalculator.changeSplits(Int(splitsSlider.value))
+        updateDisplay()
     }
     
     @IBAction func backgroundTapped(sender: AnyObject) {
@@ -67,7 +70,8 @@ class ViewController: UIViewController {
     }
     
     @IBAction func percentageChanged(sender: AnyObject) {
+        let percent = Percentages.tipPercent[tipSegment.selectedSegmentIndex]
+        tipCalculator.changePercentage(Float(percent) / 100)
         updateDisplay()
-        sliderValueChanged(sender)
     }
 }
