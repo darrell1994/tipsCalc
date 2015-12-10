@@ -8,7 +8,7 @@
 
 import UIKit
 
-class tipPercentSettingViewController: UIViewController {
+class SettingsViewController: UIViewController {
     @IBOutlet weak var tipSegment: UISegmentedControl!
 
     override func viewDidLoad() {

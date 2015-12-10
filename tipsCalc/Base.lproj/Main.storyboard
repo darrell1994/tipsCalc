@@ -236,10 +236,10 @@
             </objects>
             <point key="canvasLocation" x="2103.5" y="349.5"/>
         </scene>
-        <!--Tip Percent Setting View Controller-->
+        <!--Settings View Controller-->
         <scene sceneID="z9E-J8-Vf4">
             <objects>
-                <viewController id="TAl-JN-ZMN" customClass="tipPercentSettingViewController" customModule="tipsCalc" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="TAl-JN-ZMN" customClass="SettingsViewController" customModule="tipsCalc" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TgA-vc-xhg"/>
                         <viewControllerLayoutGuide type="bottom" id="J7l-xV-v3X"/>
