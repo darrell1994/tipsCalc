@@ -15,7 +15,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var tipSegment: UISegmentedControl!
     
     var tipCalculator = TipCalculator()
+    var currencySymbol = ""
     
+    @IBOutlet weak var currencySymbolLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,6 +25,11 @@ class ViewController: UIViewController {
         if let array = defaults.arrayForKey("percentages") as? [Int] {
             Percentages.tipPercent = array
         }
+        if let billAmount = defaults.stringForKey("billAmount") {
+            billTextField.text = billAmount
+        }
+        
+
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -31,20 +38,33 @@ class ViewController: UIViewController {
             tipSegment.insertSegmentWithTitle(String(Percentages.tipPercent[i])+"%", atIndex: 0, animated: false)
         }
         tipSegment.selectedSegmentIndex = 0
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let index = defaults.integerForKey("defaultIndex")
+        tipSegment.selectedSegmentIndex = index
+        
+        currencySymbol = getCurrencySymbol()
+        currencySymbolLabel.text = currencySymbol
+        billAmountEditingChanged(self)
+    }
+    
+    @IBAction func billAmountEditingEnded(sender: AnyObject) {
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.setObject(billTextField.text, forKey: "billAmount")
     }
 
     private func updateDisplay() {
-        tipLabel.text = String(format: "$%.2f", tipCalculator.getTotalTips())
-        totalLabel.text = String(format: "$%.2f", tipCalculator.getTotalBill())
-        splitTipLabel.text = String(format: "$%.2f", tipCalculator.getTotalTipsAfterSplit())
-        splitTotalLabel.text = String(format: "$%.2f", tipCalculator.getTotalBillAfterSplit())
+        tipLabel.text = String(format: "\(currencySymbol)%.2f", tipCalculator.getTotalTips())
+        totalLabel.text = String(format: "\(currencySymbol)%.2f", tipCalculator.getTotalBill())
+        splitTipLabel.text = String(format: "\(currencySymbol)%.2f", tipCalculator.getTotalTipsAfterSplit())
+        splitTotalLabel.text = String(format: "\(currencySymbol)%.2f", tipCalculator.getTotalBillAfterSplit())
     }
     
     @IBAction func billAmountEditingChanged(sender: AnyObject) {
         if billTextField.text != nil {
             let billText = billTextField.text!
             if billText == "" {
-                totalLabel.text = "$0.0"
+                totalLabel.text = "\(currencySymbol)0.0"
                 tipCalculator.changeBill(0.0)
             } else {
                 if let bill = Float(billText) {
@@ -73,5 +93,15 @@ class ViewController: UIViewController {
         let percent = Percentages.tipPercent[tipSegment.selectedSegmentIndex]
         tipCalculator.changePercentage(Float(percent) / 100)
         updateDisplay()
+    }
+    
+    private func getCurrencySymbol()->String {
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
+        formatter.locale = NSLocale.currentLocale()
+        let currencyString = "\(formatter.currencyCode)"
+        let locale = NSLocale(localeIdentifier: currencyString)
+        let currencySymbol = locale.displayNameForKey(NSLocaleCurrencySymbol, value: currencyString)!
+        return currencySymbol
     }
 }

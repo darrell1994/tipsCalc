@@ -57,6 +57,7 @@
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                                 <connections>
                                     <action selector="billAmountEditingChanged:" destination="nqW-sc-bxF" eventType="editingChanged" id="1l3-BI-e7y"/>
+                                    <action selector="billAmountEditingEnded:" destination="nqW-sc-bxF" eventType="editingDidEnd" id="0mh-ka-baA"/>
                                 </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="$0.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7CT-jz-Ecx">
@@ -183,6 +184,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="billTextField" destination="LRB-yS-OMZ" id="b5d-hn-gKa"/>
+                        <outlet property="currencySymbolLabel" destination="YmK-kA-eRY" id="7O0-Hz-uPI"/>
                         <outlet property="splitTipLabel" destination="OhO-GC-H9n" id="NrF-Pu-5Xg"/>
                         <outlet property="splitTotalLabel" destination="aiS-NU-7Ah" id="x8B-ML-KhN"/>
                         <outlet property="splitsLabel" destination="XeB-1Y-rgk" id="ILH-pS-KCm"/>
@@ -273,6 +275,13 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hh4-aH-qql">
+                                <rect key="frame" x="231" y="220" width="108" height="30"/>
+                                <state key="normal" title="Set as Default"/>
+                                <connections>
+                                    <action selector="defaultTapped:" destination="TAl-JN-ZMN" eventType="touchUpInside" id="aSf-Lt-BeM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>

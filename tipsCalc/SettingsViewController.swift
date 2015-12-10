@@ -21,6 +21,10 @@ class SettingsViewController: UIViewController {
             tipSegment.insertSegmentWithTitle(String(Percentages.tipPercent[i])+"%", atIndex: 0, animated: false)
         }
         tipSegment.selectedSegmentIndex = 0
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let index = defaults.integerForKey("defaultIndex")
+        tipSegment.selectedSegmentIndex = index
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -88,4 +92,11 @@ class SettingsViewController: UIViewController {
         
         self.presentViewController(alertcontroller, animated: true, completion: nil)
     }
+    
+    @IBAction func defaultTapped(sender: AnyObject) {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setInteger(tipSegment.selectedSegmentIndex, forKey: "defaultIndex")
+        defaults.synchronize()
+    }
+    
 }
